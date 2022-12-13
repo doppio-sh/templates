@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Invoice template - Doppio</title>
+		<script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+		<style>
+			@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
+
+			* {
+				margin: 0;
+				padding: 0;
+				border: 0;
+				font-size: 100%;
+				font: inherit;
+				vertical-align: baseline;
+				box-sizing: border-box;
+			}
+
+			:root {
+				--font-family: "Inter", sans-serif;
+				--font-large: 3.25mm;
+				--font-small: 2.75mm;
+				--line-height: 1.5;
+				--dark: #211D35;
+				--grey: #E5E5E5;
+				--dark-grey: #8B879A;
+				--light-purple: #F0EFF6;
+				--purple: #5935DD;
+				--dark-purple: #6A6482;
+				--shaded-white: #e2def2;
+			}
+
+			body {
+				font-family: var(--font-family);
+				font-size: var(--font-large);
+				line-height: var(--line-height);
+				color: var(--dark);
+				background: var(--grey);
+				position: relative;
+			}
+
+			@page {
+				margin: 20mm 30mm;
+			}
+
+			strong {
+				font-weight: 600;
+			}
+
+			.pagedjs_margin-top-left-corner-holder,
+			.pagedjs_margin-top,
+			.pagedjs_margin-top-right-corner-holder {
+				background: linear-gradient(
+					180deg,
+					var(--purple) 0%,
+					var(--purple) 30%,
+					transparent 30%,
+					transparent 100%
+				);
+			}
+
+			.header {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				grid-template-rows: repeat(2, 1fr);
+				grid-column-gap: 0mm;
+				grid-row-gap: 8mm;
+			}
+
+			.logo {
+				grid-area: 1 / 1 / 2 / 2;
+			}
+
+			.logo > svg {
+				transform: scale(1.25);
+				margin-left: 4mm;
+				margin-top: 1mm;
+			}
+
+			.author {
+				grid-area: 1 / 4 / 2 / 5;
+			}
+
+			.client {
+				grid-area: 2 / 1 / 3 / 2;
+			}
+
+			.client > p:first-child {
+				margin-bottom: 2mm;
+			}
+
+			.invoice-infos {
+				grid-area: 2 / 4 / 3 / 5;
+			}
+
+			.author,
+			.invoice-infos {
+				text-align: right;
+			}
+
+			.content {
+				margin-top: 16mm;
+				display: grid;
+				grid-template-columns: 2fr 1fr 1fr 1fr;
+				grid-template-rows: 10mm max-content max-content max-content;
+				grid-column-gap: 0mm;
+				grid-row-gap: 8mm;
+				position: relative;
+			}
+
+			.content > *:nth-child(-n+4) {
+				color: var(--dark-purple);
+				font-size: var(--font-small);
+				font-weight: 600;
+				display: flex;
+				justify-content: center !important;
+			}
+
+			.content::after {
+				content: "";
+				position: absolute;
+				top: 12mm;
+				left: 0;
+				width: 100%;
+				height: 1px;
+				background: var(--shaded-white);
+			}
+
+			.content > * {
+				display: flex;
+				align-items: center;
+				flex-direction: column;
+				justify-content: flex-start;
+			}
+
+			.content > *:nth-child(4n+1) {
+				padding-left: 6mm;
+				align-items: flex-start !important;
+			}
+
+			.content > *:nth-child(4n+2) {
+				align-items: flex-end !important;
+			}
+
+			.content > *:nth-child(4n+3) {
+				justify-content: center;
+			}
+
+			.content > *:nth-child(4n+4) {
+				padding-right: 6mm;
+				font-weight: 600;
+				align-items: flex-end !important;
+			}
+
+			.prestation-text {
+				margin-top: 2mm;
+				color: var(--dark-grey);
+			}
+
+			.total {
+				color: var(--dark-purple);
+				display: grid;
+				grid-template-rows: 1fr 1fr 1fr;
+				grid-template-columns: 1fr;
+				margin-top: 16mm;
+				font-weight: 600;
+				font-size: var(--font-small);
+			}
+
+			.total > div {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				padding-block: 3mm;
+				padding-inline: 6mm;
+			}
+
+			.total > div:last-child {
+				color: var(--dark);
+				font-size: var(--font-large);
+				background-color: var(--shaded-white);
+			}
+
+			.payment > div {
+				display: flex;
+				flex-direction: row;
+				gap: 4mm;
+			}
+
+			.conditions h2 {
+				margin-bottom: 2mm;
+			}
+		</style>
+		<!-- <link href="./interface.css" rel="stylesheet" type="text/css" /> -->
+	</head>
+
+	<body>
+		<div>
+			<div class="header">
+				<div class="logo">
+					<svg width="120" height="25" viewBox="0 0 120 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<g clip-path="url(#clip0_2341_6862)">
+						<path d="M16.0232 1.72317e-06V7.31293C15.4449 7.22817 14.8608 7.18599 14.276 7.18675H7.03966V17.6871C2.72485 17.0068 1.76469e-06 13.792 1.76469e-06 9.1343V8.74479C-0.000736859 7.5962 0.230399 6.45874 0.680192 5.39745C1.12999 4.33616 1.78961 3.37185 2.62135 2.55968C3.45309 1.74751 4.44063 1.1034 5.52749 0.66419C6.61435 0.224979 7.77922 -0.000719523 8.95548 1.72317e-06H16.0232Z" fill="#E345FF"/>
+						<path d="M16.0232 7.31293V17.8187H8.78692C8.20183 17.8205 7.61753 17.7764 7.03964 17.6871V7.18675H14.2759C14.8608 7.18599 15.4448 7.22817 16.0232 7.31293Z" fill="#310FAE"/>
+						<path d="M23.0629 15.8712C23.0629 21.0665 19.6919 25 14.1074 25H7.03964V17.6871C7.61753 17.7764 8.20183 17.8205 8.78692 17.8187H16.0232V7.31293C20.338 7.98771 23.0629 11.208 23.0629 15.8712Z" fill="#5935DD"/>
+						<path d="M36.5186 18.9653V0.861298H39.5636V18.9653H36.5186ZM38.6142 18.9653V16.2497H43.4796C44.6559 16.2781 45.819 16.0017 46.8505 15.4487C47.801 14.9248 48.5801 14.1487 49.0978 13.2104C49.6488 12.1979 49.9272 11.0652 49.9068 9.91879C49.9333 8.76969 49.6484 7.63415 49.0809 6.62715C48.5482 5.68867 47.7584 4.91361 46.7999 4.38884C45.7822 3.84217 44.6353 3.56598 43.4739 3.58787H38.6085V0.87227H43.5526C44.8314 0.859454 46.1005 1.09053 47.2887 1.55254C48.4076 1.99571 49.4282 2.64584 50.2945 3.46718C51.1481 4.28456 51.8261 5.25999 52.289 6.33639C52.7753 7.47044 53.02 8.68936 53.0081 9.91879C53.0173 11.1426 52.7726 12.3556 52.289 13.4847C51.8319 14.5647 51.1575 15.5441 50.3057 16.3649C49.4476 17.1883 48.432 17.8389 47.3168 18.2796C46.1382 18.7414 44.8787 18.9744 43.6088 18.9653H38.6142Z" fill="#0C091B"/>
+						<path d="M61.531 19.2012C60.3477 19.2157 59.1826 18.9161 58.16 18.3344C57.1676 17.7696 56.3427 16.9623 55.7667 15.9919C55.1694 14.9941 54.8625 13.8559 54.879 12.7002C54.8622 11.5567 55.1694 10.4308 55.7667 9.44701C56.3486 8.48816 57.1726 7.69106 58.16 7.13189C59.1826 6.55021 60.3477 6.25061 61.531 6.26509C62.7119 6.25207 63.8752 6.54552 64.9019 7.11543C65.8916 7.67162 66.7164 8.4694 67.2953 9.43055C67.8944 10.4276 68.2015 11.5663 68.183 12.7222C68.1995 13.8779 67.8926 15.016 67.2953 16.0138C66.7095 16.9959 65.8671 17.8084 64.8544 18.3684C63.8416 18.9284 62.6947 19.2158 61.531 19.2012ZM61.531 16.4582C62.202 16.4705 62.8639 16.3056 63.4468 15.9809C63.9996 15.6675 64.4497 15.207 64.7446 14.6533C65.0617 14.0534 65.2219 13.3862 65.2109 12.7112C65.2232 12.0435 65.0587 11.384 64.7334 10.7966C64.2259 9.97326 63.4087 9.37638 62.4566 9.13344C61.5044 8.89049 60.4927 9.02075 59.6376 9.49638C59.091 9.80517 58.6419 10.255 58.3398 10.7966C58.0207 11.3859 57.8603 12.0447 57.8735 12.7112C57.8625 13.3862 58.0227 14.0534 58.3398 14.6533C58.6348 15.207 59.0849 15.6675 59.6376 15.9809C60.2129 16.3043 60.8673 16.4693 61.531 16.4582Z" fill="#0C091B"/>
+						<path d="M70.61 24.1387V6.58328H73.5203V9.87492L73.0147 12.8977L73.5203 15.8986V24.1387H70.61ZM77.4081 19.2012C76.5058 19.2167 75.6143 19.0071 74.8181 18.5923C74.0804 18.2126 73.4627 17.6435 73.0315 16.9465C72.59 16.2201 72.3643 15.3881 72.3798 14.5436V10.9721C72.364 10.1286 72.5918 9.29774 73.0371 8.57472C73.4755 7.87947 74.0962 7.31125 74.835 6.9289C75.6239 6.51608 76.5076 6.30649 77.4025 6.31994C78.5041 6.30801 79.5855 6.60918 80.515 7.18674C81.4405 7.76408 82.1972 8.56541 82.7117 9.51284C83.2607 10.5261 83.5389 11.6583 83.5208 12.8045C83.5404 13.9508 83.2621 15.0833 82.7117 16.0961C82.1983 17.0399 81.441 17.8361 80.515 18.4057C79.5784 18.9552 78.5003 19.2313 77.4081 19.2012ZM76.9362 16.5131C77.5912 16.5256 78.2369 16.3604 78.8014 16.0358C79.3401 15.7115 79.7789 15.2508 80.0712 14.7027C80.3884 14.0951 80.5466 13.4204 80.5318 12.7386C80.5466 12.0569 80.3884 11.3821 80.0712 10.7746C79.7805 10.2254 79.3414 9.76432 78.8014 9.44152C78.2369 9.11693 77.5912 8.9517 76.9362 8.96423C76.2759 8.95179 75.6248 9.11691 75.0541 9.44152C74.5089 9.75811 74.0683 10.2208 73.7844 10.7746C73.4734 11.3839 73.3191 12.058 73.3349 12.7386C73.3191 13.4192 73.4734 14.0933 73.7844 14.7027C74.0708 15.2548 74.5109 15.7168 75.0541 16.0358C75.6225 16.368 76.2737 16.5408 76.9362 16.535V16.5131Z" fill="#0C091B"/>
+						<path d="M85.9591 24.1387V6.58327H88.8693V9.87491L88.3693 12.8977L88.8693 15.8986V24.1387H85.9591ZM92.7628 19.2012C91.8586 19.2174 90.9651 19.0078 90.1671 18.5923C89.4305 18.211 88.8132 17.6423 88.3805 16.9465C87.9434 16.2186 87.7199 15.3872 87.7344 14.5436V10.9721C87.7201 10.127 87.9477 9.29477 88.3918 8.56923C88.8338 7.87494 89.456 7.30714 90.1952 6.92341C90.9839 6.50991 91.8677 6.30028 92.7628 6.31446C93.8626 6.30264 94.9422 6.60384 95.8696 7.18125C96.7969 7.75825 97.5555 8.55955 98.072 9.50735C98.6165 10.522 98.8927 11.6535 98.8754 12.799C98.8941 13.9446 98.6179 15.0764 98.072 16.0906C97.5565 17.0348 96.7973 17.8309 95.8696 18.4003C94.9341 18.9525 93.8556 19.2306 92.7628 19.2012ZM92.2852 16.5131C92.9403 16.5262 93.5862 16.3609 94.1505 16.0358C94.6906 15.7132 95.1298 15.2521 95.4202 14.7026C95.7391 14.0956 95.8993 13.4208 95.8865 12.7386C95.8993 12.0564 95.7391 11.3817 95.4202 10.7746C95.1312 10.2242 94.6917 9.76277 94.1505 9.44151C93.5862 9.11638 92.9403 8.95112 92.2852 8.96423C91.6267 8.95167 90.9773 9.11683 90.4087 9.44151C89.8619 9.75778 89.4193 10.2204 89.1334 10.7746C88.8252 11.3849 88.6711 12.0583 88.6839 12.7386C88.6711 13.419 88.8252 14.0924 89.1334 14.7026C89.4214 15.2555 89.8635 15.7176 90.4087 16.0358C90.975 16.3681 91.6245 16.5409 92.2852 16.535V16.5131Z" fill="#0C091B"/>
+						<path d="M102.814 4.28463C102.585 4.29079 102.357 4.25003 102.145 4.16499C101.933 4.07996 101.742 3.95251 101.583 3.79088C101.422 3.63034 101.296 3.43975 101.212 3.2305C101.128 3.02125 101.088 2.79763 101.095 2.57298C101.089 2.34928 101.13 2.12678 101.214 1.91857C101.298 1.71036 101.423 1.52064 101.583 1.36056C101.916 1.04777 102.36 0.873047 102.822 0.873047C103.284 0.873047 103.728 1.04777 104.061 1.36056C104.362 1.69403 104.519 2.12867 104.499 2.57298C104.511 3.02457 104.339 3.46235 104.022 3.79088C103.866 3.94976 103.678 4.0756 103.47 4.16054C103.263 4.24549 103.039 4.28773 102.814 4.28463ZM101.359 18.9653V6.58329H104.275V18.9653H101.359Z" fill="#0C091B"/>
+						<path d="M113.331 19.2012C112.148 19.2157 110.983 18.9161 109.96 18.3344C108.968 17.7696 108.143 16.9623 107.567 15.9919C106.97 14.994 106.663 13.8559 106.679 12.7002C106.662 11.5567 106.97 10.4308 107.567 9.44701C108.149 8.48816 108.973 7.69106 109.96 7.13189C110.983 6.55021 112.148 6.25061 113.331 6.26509C114.512 6.25286 115.675 6.54625 116.702 7.11543C117.7 7.67922 118.529 8.48885 119.107 9.46346C119.706 10.4605 120.013 11.5992 119.994 12.7551C120.011 13.9108 119.704 15.0489 119.107 16.0467C118.516 17.0243 117.67 17.8313 116.655 18.3854C115.64 18.9396 114.494 19.2211 113.331 19.2012ZM113.331 16.4582C114.002 16.4705 114.664 16.3056 115.247 15.9809C115.8 15.6675 116.25 15.207 116.545 14.6533C116.86 14.053 117.018 13.3858 117.005 12.7112C117.019 12.044 116.857 11.3845 116.534 10.7966C116.026 9.97326 115.209 9.37638 114.257 9.13343C113.305 8.89049 112.293 9.02075 111.438 9.49638C110.88 9.80793 110.422 10.266 110.118 10.8185C109.798 11.4078 109.638 12.0667 109.651 12.7332C109.64 13.4082 109.8 14.0753 110.118 14.6752C110.412 15.229 110.863 15.6894 111.415 16.0029C111.999 16.3225 112.662 16.48 113.331 16.4582Z" fill="#0C091B"/>
+						</g>
+						<defs>
+						<clipPath id="clip0_2341_6862">
+						<rect width="120" height="25" fill="white"/>
+						</clipPath>
+						</defs>
+					</svg>
+				</div>
+				<div class="author">
+					<p>
+						<strong>Jane Doe</strong>
+					</p>
+					<p>support@doppio.com</p>
+					<p>06.57.38.19.57</p>
+				</div>
+				<div class="client">
+					<p>
+						<strong>Client</strong>
+					</p>
+					<p>H20 Company</p>
+					<p>15 rue de la Liberté</p>
+					<p>44000 Nantes, France</p>
+				</div>
+				<div class="invoice-infos">
+					<p>
+						<strong>Invoice :</strong> # 221002
+					</p>
+					<p>
+						<strong>Issued on :</strong> 05/10/2022
+					</p>
+				</div>
+			</div>
+			<div class="content">
+				<div class="table-head-description">
+					<p>Description</p>
+				</div>
+				<div class="table-head-price">
+					<p>Unit price</p>
+				</div>
+				<div class="table-head-quantity">
+					<p>Quantity</p>
+				</div>
+				<div class="table-head-total">
+					<p>Total amount</p>
+				</div>
+				<div>
+					<div>
+						<p>
+							<strong>Prestation name</strong>
+						</p>
+						<p class="prestation-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id amet, sit vitae sed. Sed tristique auctor.</p>
+					</div>
+				</div>
+				<div>
+					<p>1 300,00€</p>
+				</div>
+				<div>
+					<p>2</p>
+				</div>
+				<div>
+					<p>2 600,00€</p>
+				</div>
+				<div>
+					<div>
+						<p>
+							<strong>Prestation name</strong>
+						</p>
+						<p class="prestation-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id amet, sit vitae sed. Sed tristique auctor.</p>
+					</div>
+				</div>
+				<div>
+					<p>100,00€</p>
+				</div>
+				<div>
+					<p>6</p>
+				</div>
+				<div>
+					<p>600,00€</p>
+				</div>
+				<div>
+					<div>
+						<p>
+							<strong>Prestation name</strong>
+						</p>
+					</div>
+				</div>
+				<div>
+					<p>300,00€</p>
+				</div>
+				<div>
+					<p>1</p>
+				</div>
+				<div>
+					<p>300,00€</p>
+				</div>
+			</div>
+			<div class="total">
+				<div>
+					<div>
+						<p>Subtotal</p>
+					</div>
+					<div>
+						<p>3 500,00€</p>
+					</div>
+				</div>
+				<div>
+					<div>
+						<p>Tax rate at 20%</p>
+					</div>
+					<div>
+						<p>700,00€</p>
+					</div>
+				</div>
+				<div>
+					<div>
+						<p>
+							<strong>Balance due</strong>
+						</p>
+					</div>
+					<div>
+						<p>
+							<strong>4 200,00€</strong>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
